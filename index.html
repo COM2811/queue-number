@@ -4,15 +4,8 @@
   <meta charset="UTF-8">
   <title>رقم الطابور الحالي</title>
   <style>
-    body {
-      font-family: Arial;
-      text-align: center;
-      margin-top: 100px;
-    }
-    .number {
-      font-size: 80px;
-      color: #000;
-    }
+    body { font-family: Arial; text-align: center; margin-top: 100px; }
+    .number { font-size: 80px; color: #000; }
   </style>
 </head>
 <body>
@@ -21,11 +14,19 @@
 <div class="number" id="num">---</div>
 
 <script>
-fetch("number.json")
-  .then(res => res.json())
-  .then(data => {
-    document.getElementById("num").innerText = data.number;
-  });
+async function updateNumber() {
+    try {
+        const res = await fetch("number.json?_=" + new Date().getTime());
+        const data = await res.json();
+        document.getElementById("num").innerText = data.number;
+    } catch (e) {
+        console.error("فشل جلب الرقم:", e);
+    }
+}
+
+// تحديث الرقم كل 5 ثوانٍ
+updateNumber();
+setInterval(updateNumber, 5000);
 </script>
 
 </body>
